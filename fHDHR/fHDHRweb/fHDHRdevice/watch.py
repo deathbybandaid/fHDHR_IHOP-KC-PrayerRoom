@@ -134,12 +134,12 @@ class WatchStream():
 
         vlc_command = [
                         "cvlc",
-                        "--intf",
+                        "-V", "dummy",
+                        "-I", "dummy",
                         "-vvv",
-                        "-q",
-                        "-I", "rc",
-                        "--verbose=0",
-                        "--ignore-config",
+                        "--play-and-exit",
+                        # "--verbose=0",
+                        # "--ignore-config",
                         "--sout-keep",
                         stream_args["channelUri"][0]
                         ]
