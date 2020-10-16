@@ -46,18 +46,16 @@ class WatchStream():
 
         ffmpeg_command = [self.config.dict["ffmpeg"]["ffmpeg_path"]]
 
-        streamurl = 'concat:'
-        streamurl += "|".join(stream_args["channelUri"])
-        print(streamurl)
-        ffmpeg_command.extend(["-i", streamurl])
-        # if len(stream_args["channelUri"]) > 1:
-        #    ffmpeg_command.extend(["-map", "0:v", "-map", "1:a"])
+        for chanurl in stream_args["channelUri"]:
+            ffmpeg_command.extend(["-i", chanurl])
+        if len(stream_args["channelUri"]) > 1:
+            ffmpeg_command.extend(["-map", "0:v", "-map", "1:a"])
 
         ffmpeg_command.extend([
                                 "-c", "copy",
                                 "-f", "mpegts",
-                                "-nostats", "-hide_banner",
-                                "-loglevel", "fatal",
+                                # "-nostats", "-hide_banner",
+                                # "-loglevel", "fatal",
                                 "pipe:stdout"
                                 ])
 
