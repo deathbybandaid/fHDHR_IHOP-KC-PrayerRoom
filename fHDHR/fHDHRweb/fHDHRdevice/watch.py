@@ -136,7 +136,9 @@ class WatchStream():
                         "cvlc",
                         "-vvv",
                         "--live-caching", "2000",
-                        "-I", "dummy",
+                        "-I", "dummy", "--dummy-quiet",
+                        "--verbose=0",
+                        "--ignore-config",
                         "--sout",
                         stream_args["channelUri"][0]
                         ]
