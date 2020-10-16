@@ -43,7 +43,7 @@ class WatchStream():
     def ffmpeg_stream(self, stream_args, tunernum):
 
         bytes_per_read = int(self.config.dict["ffmpeg"]["bytes_per_read"])
-        print(stream_args["channelUri"][0])
+        print(stream_args["channelUri"])
 
         ffmpeg_command = [self.config.dict["ffmpeg"]["ffmpeg_path"]]
 
@@ -60,6 +60,8 @@ class WatchStream():
 
         if not stream_args["duration"] == 0:
             stream_args["duration"] += time.time()
+
+        print(ffmpeg_command)
 
         ffmpeg_proc = subprocess.Popen(ffmpeg_command, stdout=subprocess.PIPE)
 
@@ -115,8 +117,12 @@ class WatchStream():
         if not stream_args["channelUri"]:
             print("Could not Obtain Channel Stream.")
             stream_args["content_type"] = "video/mpeg"
-        else:
-            channelUri_headers = self.web.session.head(stream_args["channelUri"][0]).headers
-            stream_args["content_type"] = channelUri_headers['Content-Type']
+            return stream_args
+
+        if isinstance(stream_args["channelUri"], str):
+            stream_args["channelUri"] = [stream_args["channelUri"]]
+
+        channelUri_headers = self.web.session.head(stream_args["channelUri"][0]).headers
+        stream_args["content_type"] = channelUri_headers['Content-Type']
 
         return stream_args
