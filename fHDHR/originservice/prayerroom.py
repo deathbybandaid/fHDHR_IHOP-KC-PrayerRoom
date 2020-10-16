@@ -86,7 +86,6 @@ class fHDHRservice():
         video_url = "https://storage.sardius.media/archives/-K6FGrVYzVr92SDZiDnc/events/site_68FBe1c2dE/video_0.m3u8"
         audio_url = "https://storage.sardius.media/archives/-K6FGrVYzVr92SDZiDnc/events/site_68FBe1c2dE/audio_0_eng.m3u8"
         streamurl = [video_url, audio_url]
-        streamurl = video_url
         streamdict = {"number": chandict["number"], "stream_url": streamurl}
         streamlist.append(streamdict)
 

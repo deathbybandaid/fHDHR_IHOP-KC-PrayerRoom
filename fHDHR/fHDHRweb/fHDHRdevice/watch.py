@@ -45,7 +45,7 @@ class WatchStream():
         bytes_per_read = int(self.config.dict["ffmpeg"]["bytes_per_read"])
 
         ffmpeg_command = [self.config.dict["ffmpeg"]["ffmpeg_path"],
-                          "-i", stream_args["channelUri"],
+                          "-i", stream_args["channelUri"][0],
                           "-c", "copy",
                           "-f", "mpegts",
                           "-nostats", "-hide_banner",
@@ -106,7 +106,7 @@ class WatchStream():
 
     def get_stream_info(self, stream_args):
 
-        stream_args["channelUri"] = self.origserv.get_channel_stream(str(stream_args["channel"]))
+        stream_args["channelUri"] = self.origserv.get_channel_stream(str(stream_args["channel"]))[0]
         if not stream_args["channelUri"]:
             print("Could not Obtain Channel Stream.")
             stream_args["content_type"] = "video/mpeg"
