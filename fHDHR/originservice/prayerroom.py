@@ -169,6 +169,7 @@ class fHDHRservice():
                                     "isnew": False,
                                     "id": str(event['time_start']),
                                     }
+                print(clean_prog_dict["time_start"])
 
                 programguide[str(c["number"])]["listing"].append(clean_prog_dict)
 
