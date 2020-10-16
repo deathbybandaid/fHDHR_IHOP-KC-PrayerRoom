@@ -136,7 +136,7 @@ class WatchStream():
                         "cvlc",
                         "-vvv",
                         stream_args["channelUri"][0],
-                        "--sout",
+                        # "--sout",
                         "-I", "dummy"
                         # "-f", "--no-osd",
                         # "--no-ts-trust-pcr",
