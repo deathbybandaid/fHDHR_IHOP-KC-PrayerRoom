@@ -130,7 +130,7 @@ class WatchStream():
 
     def vlc_stream(self, stream_args, tunernum):
 
-        bytes_per_read = int(self.config.dict["ffmpeg"]["bytes_per_read"])
+        # bytes_per_read = int(self.config.dict["ffmpeg"]["bytes_per_read"])
 
         vlc_command = [
                         "vlc",
@@ -151,7 +151,7 @@ class WatchStream():
                         print("Requested Duration Expired.")
                         break
 
-                    videoData = vlc_proc.stdout.read(bytes_per_read)[0]
+                    videoData = vlc_proc.communicate()[0]
                     if not videoData:
                         break
 
