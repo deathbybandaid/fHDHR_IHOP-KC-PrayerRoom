@@ -153,9 +153,6 @@ class fHDHRservice():
                     assignment_person = event['assignments'][assignment]
                     description += str(", " + assignment_title + ": " + assignment_person)
 
-                progid = event["time_start_dt"].timestamp()
-                print(progid)
-
                 clean_prog_dict = {
                                     "time_start": event['time_start'],
                                     "time_end": event['time_end'],
@@ -171,7 +168,7 @@ class fHDHRservice():
                                     "seasonnumber": None,
                                     "episodenumber": None,
                                     "isnew": False,
-                                    "id": str(event['time_start']),
+                                    "id": "PR_" + str(event["time_start_dt"].timestamp()),
                                     }
 
                 programguide[str(c["number"])]["listing"].append(clean_prog_dict)
