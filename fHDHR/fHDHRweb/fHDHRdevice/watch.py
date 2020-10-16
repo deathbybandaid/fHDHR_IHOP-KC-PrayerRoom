@@ -138,8 +138,8 @@ class WatchStream():
                         "-I", "dummy",
                         "-vvv",
                         "--play-and-exit",
-                        # "--verbose=0",
-                        # "--ignore-config",
+                        "--verbose=0",
+                        "--ignore-config",
                         "--sout-keep",
                         stream_args["channelUri"][0]
                         ]
