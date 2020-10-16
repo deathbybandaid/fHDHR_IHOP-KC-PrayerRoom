@@ -1,6 +1,5 @@
 import subprocess
 import time
-import ffmpeg
 
 from fHDHR.fHDHRerrors import TunerError
 import fHDHR.tools
@@ -42,18 +41,15 @@ class WatchStream():
         return generate()
 
     def ffmpeg_stream(self, stream_args, tunernum):
-        input_video = ffmpeg.input(stream_args["channelUri"][0])
-        input_audio = ffmpeg.input(stream_args["channelUri"][1])
-        return ffmpeg.concat(input_video, input_audio, v=1, a=1).output('pipe:')
-
-        return
 
         bytes_per_read = int(self.config.dict["ffmpeg"]["bytes_per_read"])
 
         ffmpeg_command = [self.config.dict["ffmpeg"]["ffmpeg_path"]]
 
-        for chanurl in stream_args["channelUri"]:
-            ffmpeg_command.extend(["-i", chanurl])
+        streamurl = 'concat:'
+        streamurl += "|".join(stream_args["channelUri"])
+        print(streamurl)
+        ffmpeg_command.extend(["-i", streamurl])
         if len(stream_args["channelUri"]) > 1:
             ffmpeg_command.extend(["-map", "0:v", "-map", "1:a"])
 
