@@ -156,7 +156,7 @@ class fHDHRservice():
                                     "time_start": event['time_start'],
                                     "time_end": event['time_end'],
                                     "duration_minutes": event['duration_minutes'],
-                                    "thumbnail": "https://i.ytimg.com/vi/%s/maxresdefault.jpg" % (str(c["id"])),
+                                    "thumbnail": "https://i.ytimg.com/vi/Faz6jkFTaa0/maxresdefault.jpg",
                                     "title": event['title'],
                                     "sub-title": event["start_kc_time"] + " Kansas City Time",
                                     "description": description,
@@ -167,7 +167,7 @@ class fHDHRservice():
                                     "seasonnumber": None,
                                     "episodenumber": None,
                                     "isnew": False,
-                                    "id": event['time_start'],
+                                    "id": str(event['time_start']),
                                     }
 
                 programguide[str(c["number"])]["listing"].append(clean_prog_dict)
