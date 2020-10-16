@@ -134,7 +134,7 @@ class WatchStream():
 
         vlc_command = [
                         "cvlc",
-                        "-Vdummy", "-Idummy", "--no-audio",
+                        "-I", "dummy", "-Vdummy", "-Idummy", "--no-audio",
                         "-f", "--no-osd",
                         # "--verbose=0",
                         "--quiet", "--play-and-exit",
