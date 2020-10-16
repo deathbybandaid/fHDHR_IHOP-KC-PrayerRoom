@@ -103,6 +103,9 @@ class fHDHRservice():
         kctime = pytz.timezone("America/Chicago")
         today_naive = datetime.datetime.strptime(str(datetime.date.today()) + " 00:00:00", "%Y-%m-%d %H:%M:%S")
         kc_dt = kctime.localize(today_naive)
+        print(kc_dt)
+        kc_dt = kc_dt.replace(hour=0)
+        print(kc_dt)
         for x in range(0, 6):
             xdate = kc_dt + datetime.timedelta(days=x)
             dayofweek = calendar.day_name[xdate.weekday()]
@@ -115,9 +118,7 @@ class fHDHRservice():
                 else:
                     time_end = xdate.replace(hour=event["end_hour"])
                 duration_minutes = (time_end - time_start).total_seconds() / 60
-                print(time_start)
                 time_start = time_start.astimezone(pytz.utc)
-                print(time_start)
                 time_end = time_end.astimezone(pytz.utc)
                 curreventdict = {
                                 "time_start": str(time_start.strftime('%Y%m%d%H%M%S')) + " +0000",
