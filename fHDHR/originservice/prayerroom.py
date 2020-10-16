@@ -322,3 +322,21 @@ class fHDHRservice():
     def pull_pdf_epg_data(self):
         self.download_pdf_epg()
         return self.scrape_pdf()
+
+    def get_online_file_time(self):
+        url_head = urllib.request.Request(self.pdf_sched_url, method='HEAD')
+        resp = urllib.request.urlopen(url_head)
+        online_file_time = resp.headers['last-modified'].replace(" GMT", "")
+        online_file_time = datetime.datetime.strptime(online_file_time, '%a, %d %b %Y %H:%M:%S')
+        online_file_time = online_file_time.replace(tzinfo=FixedOffset(-4, "GMT-4")).astimezone(datetime.timezone.utc)
+        return online_file_time
+
+    def get_offline_file_time(self):
+        offline_file_time = datetime.datetime.utcfromtimestamp(os.path.getmtime(self.pdf_sched))
+        offline_file_time = offline_file_time.replace(tzinfo=datetime.timezone.utc)
+        return offline_file_time
+
+    def clear_database_cache(self):
+        print("Clearing PDF cache.")
+        if os.path.exists(self.pdf_sched):
+            os.remove(self.pdf_sched)
