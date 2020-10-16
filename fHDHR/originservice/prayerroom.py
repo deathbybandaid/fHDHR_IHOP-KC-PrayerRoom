@@ -127,7 +127,7 @@ class fHDHRservice():
                                 }
                 events_list.append(curreventdict)
 
-        for c in self.origserv.get_channels():
+        for c in self.get_channels():
 
             if str(c["number"]) not in list(programguide.keys()):
                 programguide[str(c["number"])] = {
