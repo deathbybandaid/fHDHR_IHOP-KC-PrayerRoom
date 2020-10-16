@@ -138,7 +138,8 @@ class WatchStream():
                         "-f", "--no-osd",
                         # "--verbose=0",
                         stream_args["channelUri"][0],
-                        "-L"
+                        "-L",
+                        "vlc:quit"
                         ]
 
         vlc_proc = subprocess.Popen(vlc_command, stdout=subprocess.PIPE)
