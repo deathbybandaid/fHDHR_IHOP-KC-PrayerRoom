@@ -49,7 +49,7 @@ class WatchStream():
         for chanurl in stream_args["channelUri"]:
             ffmpeg_command.extend(["-i", chanurl])
         if len(stream_args["channelUri"]) > 1:
-            ffmpeg_command.extend(["-map", "0", "-map", "1"])
+            ffmpeg_command.extend(["-map", "0:v", "-map", "1:a:?"])
 
         ffmpeg_command.extend([
                                 "-c", "copy",
