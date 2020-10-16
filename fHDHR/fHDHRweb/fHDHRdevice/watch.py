@@ -44,20 +44,14 @@ class WatchStream():
 
         bytes_per_read = int(self.config.dict["ffmpeg"]["bytes_per_read"])
 
-        ffmpeg_command = [self.config.dict["ffmpeg"]["ffmpeg_path"]]
-
-        for chanurl in stream_args["channelUri"]:
-            ffmpeg_command.extend(["-i", chanurl])
-        if len(stream_args["channelUri"]) > 1:
-            ffmpeg_command.extend(["-map", "0:v", "-map", "1:a:?"])
-
-        ffmpeg_command.extend([
-                                "-c", "copy",
-                                "-f", "mpegts",
-                                "-nostats", "-hide_banner",
-                                "-loglevel", "fatal",
-                                "pipe:stdout"
-                                ])
+        ffmpeg_command = [self.config.dict["ffmpeg"]["ffmpeg_path"],
+                          "-i", stream_args["channelUri"],
+                          "-c", "copy",
+                          "-f", "mpegts",
+                          "-nostats", "-hide_banner",
+                          "-loglevel", "fatal",
+                          "pipe:stdout"
+                          ]
 
         if not stream_args["duration"] == 0:
             stream_args["duration"] += time.time()
@@ -94,6 +88,76 @@ class WatchStream():
 
         return generate()
 
+    def ffmpeg_stream_merge(self, stream_args, tunernum):
+
+        bytes_per_read = int(self.config.dict["ffmpeg"]["bytes_per_read"])
+
+        ffmpeg_command_video = [self.config.dict["ffmpeg"]["ffmpeg_path"]]
+        ffmpeg_command_audio = [self.config.dict["ffmpeg"]["ffmpeg_path"]]
+
+        ffmpeg_command_video.extend(["-i", stream_args["channelUri"][0]])
+        ffmpeg_command_audio.extend(["-i", stream_args["channelUri"][1]])
+
+        # ffmpeg_command.extend(["-map", "0:v", "-map", "1:a"])
+
+        ffmpeg_command_video.extend([
+                                "-c", "copy",
+                                "-f", "mpegts",
+                                "-nostats", "-hide_banner",
+                                "-loglevel", "fatal",
+                                "pipe:stdout"
+                                ])
+        ffmpeg_command_audio.extend([
+                                "-c", "copy",
+                                "-f", "mpegts",
+                                "-nostats", "-hide_banner",
+                                "-loglevel", "fatal",
+                                "pipe:stdout"
+                                ])
+
+        if not stream_args["duration"] == 0:
+            stream_args["duration"] += time.time()
+
+        ffmpeg_proc_video = subprocess.Popen(ffmpeg_command_video, stdout=subprocess.PIPE)
+        ffmpeg_proc_audio = subprocess.Popen(ffmpeg_command_audio, stdout=subprocess.PIPE)
+
+        def generate():
+            try:
+                while True:
+
+                    if not stream_args["duration"] == 0 and not time.time() < stream_args["duration"]:
+                        ffmpeg_proc_video.terminate()
+                        ffmpeg_proc_video.communicate()
+                        ffmpeg_proc_audio.terminate()
+                        ffmpeg_proc_audio.communicate()
+                        print("Requested Duration Expired.")
+                        break
+
+                    videoData = ffmpeg_proc_video.stdout.read(bytes_per_read)
+                    audioData = ffmpeg_proc_audio.stdout.read(bytes_per_read)
+                    if not videoData or not audioData:
+                        break
+
+                    try:
+                        yield videoData, audioData
+
+                    except Exception as e:
+                        ffmpeg_proc_video.terminate()
+                        ffmpeg_proc_video.communicate()
+                        ffmpeg_proc_audio.terminate()
+                        ffmpeg_proc_audio.communicate()
+                        print("Connection Closed: " + str(e))
+
+            except GeneratorExit:
+                ffmpeg_proc_video.terminate()
+                ffmpeg_proc_video.communicate()
+                ffmpeg_proc_audio.terminate()
+                ffmpeg_proc_audio.communicate()
+                print("Connection Closed.")
+                self.tuners.tuner_close(tunernum)
+
+        return generate()
+
     def get_stream(self, stream_args):
 
         try:
@@ -106,7 +170,10 @@ class WatchStream():
         print("Attempting a " + stream_args["method"] + " stream request for channel " + str(stream_args["channel"]))
 
         if stream_args["method"] == "ffmpeg":
-            return self.ffmpeg_stream(stream_args, tunernum)
+            if len(stream_args["channelUri"]) > 1:
+                return self.ffmpeg_stream_merge(stream_args, tunernum)
+            else:
+                return self.ffmpeg_stream(stream_args, tunernum)
         elif stream_args["method"] == "direct":
             return self.direct_stream(stream_args, tunernum)
 
