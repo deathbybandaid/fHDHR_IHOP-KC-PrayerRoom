@@ -52,7 +52,8 @@ class WatchStream():
             ffmpeg_command.extend(["-map", "0:v:0", "-map", "1:a:0"])
 
         ffmpeg_command.extend([
-                                "-c", "copy",
+                                "-c:v", "copy",
+                                "-c:a", "copy",
                                 "-f", "mpegts",
                                 "-nostats", "-hide_banner",
                                 "-loglevel", "fatal",
