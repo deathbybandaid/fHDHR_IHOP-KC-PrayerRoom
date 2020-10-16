@@ -138,6 +138,7 @@ class WatchStream():
                         stream_args["channelUri"][0],
                         # "--sout",
                         "-I", "dummy"
+                        "-V", "dummy"
                         # "-f", "--no-osd",
                         # "--no-ts-trust-pcr",
                         # "--ts-seek-percent",
