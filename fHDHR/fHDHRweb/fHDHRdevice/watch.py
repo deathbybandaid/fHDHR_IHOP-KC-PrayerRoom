@@ -137,6 +137,7 @@ class WatchStream():
                         "-I", "dummy", "-Vdummy", "-Idummy", "--no-audio",
                         "-f", "--no-osd",
                         "--no-ts-trust-pcr",
+                        "--ts-seek-percent",
                         # "--verbose=0",
                         # "--quiet",
                         "--play-and-exit",
