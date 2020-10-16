@@ -134,13 +134,16 @@ class WatchStream():
 
         vlc_command = [
                         "cvlc",
-                        "-I", "dummy", "-Vdummy", "-Idummy", "--no-audio",
-                        "-f", "--no-osd",
-                        "--no-ts-trust-pcr",
-                        "--ts-seek-percent",
+                        "-vvv",
+                        stream_args["channelUri"][0],
+                        "--sout",
+                        "-I", "dummy"
+                        # "-f", "--no-osd",
+                        # "--no-ts-trust-pcr",
+                        # "--ts-seek-percent",
                         # "--verbose=0",
                         # "--quiet",
-                        stream_args["channelUri"][0],
+                        "vlc://quit"
                         ]
 
         vlc_proc = subprocess.Popen(vlc_command, stdout=subprocess.PIPE)
@@ -163,13 +166,11 @@ class WatchStream():
                         yield videoData
 
                     except Exception as e:
-                        subprocess.call(["vlc", "vlc://quit"])
                         vlc_proc.terminate()
                         vlc_proc.communicate()
                         print("Connection Closed: " + str(e))
 
             except GeneratorExit:
-                subprocess.call(["vlc", "vlc://quit"])
                 vlc_proc.terminate()
                 vlc_proc.communicate()
                 print("Connection Closed.")
