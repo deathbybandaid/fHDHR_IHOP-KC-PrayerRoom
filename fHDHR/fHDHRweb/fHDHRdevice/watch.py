@@ -134,6 +134,7 @@ class WatchStream():
 
         vlc_command = [
                         "cvlc",
+                        "--intf",
                         "-vvv",
                         "--live-caching", "2000",
                         "-I", "dummy",
