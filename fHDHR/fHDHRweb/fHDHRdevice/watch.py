@@ -136,7 +136,7 @@ class WatchStream():
                         "cvlc",
                         "--intf",
                         "-vvv",
-                        "-I", "dummy",
+                        "-I", "rc",
                         "--verbose=0",
                         "--ignore-config",
                         "--sout-keep",
