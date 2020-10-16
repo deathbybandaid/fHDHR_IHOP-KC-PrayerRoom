@@ -20,7 +20,7 @@ class WatchStream():
         if not stream_args["duration"] == 0:
             stream_args["duration"] += time.time()
 
-        req = self.web.session.get(stream_args["channelUri"], stream=True)
+        req = self.web.session.get(stream_args["channelUri"][0], stream=True)
 
         def generate():
             try:
