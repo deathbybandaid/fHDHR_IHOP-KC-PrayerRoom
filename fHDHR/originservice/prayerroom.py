@@ -86,7 +86,7 @@ class fHDHRservice():
         video_url = "https://storage.sardius.media/archives/-K6FGrVYzVr92SDZiDnc/events/site_68FBe1c2dE/video_0.m3u8"
         audio_url = "https://storage.sardius.media/archives/-K6FGrVYzVr92SDZiDnc/events/site_68FBe1c2dE/audio_0_eng.m3u8"
         streamurl = [video_url, audio_url]
-        streamurl = "http://10.0.12.115:8866/live?channel=6.3&client=6.3"
+        streamurl = "https://manifest.googlevideo.com/api/manifest/hls_playlist/expire/1602898271/ei/__SJX_6WEYHK1AH14ZiACw/ip/131.150.16.151/id/Faz6jkFTaa0.0/itag/96/source/yt_live_broadcast/requiressl/yes/ratebypass/yes/live/1/goi/160/sgoap/gir%3Dyes%3Bitag%3D140/sgovp/gir%3Dyes%3Bitag%3D137/hls_chunk_host/r4---sn-vgqsrn7s.googlevideo.com/playlist_duration/30/manifest_duration/30/vprv/1/playlist_type/DVR/initcwndbps/15380/mh/UN/mm/44/mn/sn-vgqsrn7s/ms/lva/mv/m/mvi/4/pl/21/dover/11/keepalive/yes/fexp/23915654/mt/1602876562/disable_polymer/true/sparams/expire,ei,ip,id,itag,source,requiressl,ratebypass,live,goi,sgoap,sgovp,playlist_duration,manifest_duration,vprv,playlist_type/sig/AOq0QJ8wRgIhAOxIzX6Epv76NxyKLogXcpW35fZnq-4YycekR5yU3z3tAiEAoGFWC-K7y0vcmQakDLl9FpanILjpPSed6n5UIOz0xYQ%3D/lsparams/hls_chunk_host,initcwndbps,mh,mm,mn,ms,mv,mvi,pl/lsig/AG3C_xAwRQIhAOlAPNa_xVkMqoovL1saTk0uc8oJWAfyObtKI7u69fDdAiBJurp-WHTYqLuTJiQtg5kzx7yy4yJ3MQWh5ihA5JQ0uQ%3D%3D/playlist/index.m3u8"
         streamdict = {"number": chandict["number"], "stream_url": streamurl}
         streamlist.append(streamdict)
 
