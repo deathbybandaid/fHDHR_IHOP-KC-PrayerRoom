@@ -143,7 +143,6 @@ class WatchStream():
                         "--play-and-exit",
                         stream_args["channelUri"][0],
                         "-L",
-                        "vlc:quit"
                         ]
 
         vlc_proc = subprocess.Popen(vlc_command, stdout=subprocess.PIPE)
@@ -166,11 +165,13 @@ class WatchStream():
                         yield videoData
 
                     except Exception as e:
+                        subprocess.call(["vlc", "vlc://quit"])
                         vlc_proc.terminate()
                         vlc_proc.communicate()
                         print("Connection Closed: " + str(e))
 
             except GeneratorExit:
+                subprocess.call(["vlc", "vlc://quit"])
                 vlc_proc.terminate()
                 vlc_proc.communicate()
                 print("Connection Closed.")
