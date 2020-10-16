@@ -151,7 +151,7 @@ class WatchStream():
                         print("Requested Duration Expired.")
                         break
 
-                    videoData = vlc_proc.stdout.read(bytes_per_read)
+                    videoData = vlc_proc.stdout.read(bytes_per_read)[0]
                     if not videoData:
                         break
 
