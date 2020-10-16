@@ -107,12 +107,12 @@ class WatchStream():
 
     def get_stream_info(self, stream_args):
 
-        stream_args["channelUri"] = self.origserv.get_channel_stream(str(stream_args["channel"]))[0]
+        stream_args["channelUri"] = self.origserv.get_channel_stream(str(stream_args["channel"]))
         if not stream_args["channelUri"]:
             print("Could not Obtain Channel Stream.")
             stream_args["content_type"] = "video/mpeg"
         else:
-            channelUri_headers = self.web.session.head(stream_args["channelUri"]).headers
+            channelUri_headers = self.web.session.head(stream_args["channelUri"][0]).headers
             stream_args["content_type"] = channelUri_headers['Content-Type']
 
         return stream_args
