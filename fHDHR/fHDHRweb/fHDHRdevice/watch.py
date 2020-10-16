@@ -137,6 +137,7 @@ class WatchStream():
                         "-Vdummy", "-Idummy", "--no-audio",
                         "-f", "--no-osd",
                         # "--verbose=0",
+                        "--quiet", "--play-and-exit",
                         stream_args["channelUri"][0],
                         "-L",
                         "vlc:quit"
