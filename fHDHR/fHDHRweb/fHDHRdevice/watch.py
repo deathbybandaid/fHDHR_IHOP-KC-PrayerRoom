@@ -136,6 +136,7 @@ class WatchStream():
                         "cvlc",
                         "-I", "dummy", "-Vdummy", "-Idummy", "--no-audio",
                         "-f", "--no-osd",
+                        "--no-ts-trust-pcr",
                         # "--verbose=0",
                         # "--quiet",
                         "--play-and-exit",
