@@ -46,9 +46,10 @@ class WatchStream():
         print(stream_args["channelUri"][0])
 
         ffmpeg_command = [self.config.dict["ffmpeg"]["ffmpeg_path"]]
-        ffmpeg_command.extend([
-                                "-i", stream_args["channelUri"][0]
-                                ])
+
+        for chanurl in stream_args["channelUri"]:
+            ffmpeg_command.extend(["-i", chanurl])
+
         ffmpeg_command.extend([
                                 "-c", "copy",
                                 "-f", "mpegts",
