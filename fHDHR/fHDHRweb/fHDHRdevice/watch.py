@@ -43,6 +43,7 @@ class WatchStream():
     def ffmpeg_stream(self, stream_args, tunernum):
 
         bytes_per_read = int(self.config.dict["ffmpeg"]["bytes_per_read"])
+        print(stream_args["channelUri"][0])
 
         ffmpeg_command = [self.config.dict["ffmpeg"]["ffmpeg_path"],
                           "-i", stream_args["channelUri"][0],
