@@ -135,9 +135,9 @@ class WatchStream():
         vlc_command = [
                         "cvlc",
                         "-vvv",
-                        stream_args["channelUri"][0],
                         "--live-caching", "2000",
-                        "--sout"
+                        "--sout",
+                        stream_args["channelUri"][0]
                         ]
 
         vlc_proc = subprocess.Popen(vlc_command, stdout=subprocess.PIPE)
