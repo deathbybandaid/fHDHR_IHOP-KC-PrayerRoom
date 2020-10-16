@@ -45,14 +45,17 @@ class WatchStream():
         bytes_per_read = int(self.config.dict["ffmpeg"]["bytes_per_read"])
         print(stream_args["channelUri"][0])
 
-        ffmpeg_command = [self.config.dict["ffmpeg"]["ffmpeg_path"],
-                          "-i", stream_args["channelUri"][0],
-                          "-c", "copy",
-                          "-f", "mpegts",
-                          "-nostats", "-hide_banner",
-                          "-loglevel", "fatal",
-                          "pipe:stdout"
-                          ]
+        ffmpeg_command = [self.config.dict["ffmpeg"]["ffmpeg_path"]]
+        ffmpeg_command.extend([
+                                "-i", stream_args["channelUri"][0]
+                                ])
+        ffmpeg_command.extend([
+                                "-c", "copy",
+                                "-f", "mpegts",
+                                "-nostats", "-hide_banner",
+                                "-loglevel", "fatal",
+                                "pipe:stdout"
+                                ])
 
         if not stream_args["duration"] == 0:
             stream_args["duration"] += time.time()
