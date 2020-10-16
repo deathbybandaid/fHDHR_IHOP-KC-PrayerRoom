@@ -137,8 +137,8 @@ class WatchStream():
                         "-vvv",
                         stream_args["channelUri"][0],
                         # "--sout",
-                        "-I", "rc"
-                        "-V", "dummy"
+                        "-I", "dummy",
+                        "-V", "dummy",
                         # "-f", "--no-osd",
                         # "--no-ts-trust-pcr",
                         # "--ts-seek-percent",
