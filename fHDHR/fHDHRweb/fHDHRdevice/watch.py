@@ -133,14 +133,9 @@ class WatchStream():
         bytes_per_read = int(self.config.dict["ffmpeg"]["bytes_per_read"])
 
         vlc_command = [
-                        "cvlc",
-                        "-V", "dummy",
-                        "-I", "dummy",
-                        "-vvv",
-                        "--play-and-exit",
-                        "--verbose=0",
-                        "--ignore-config",
-                        "--sout-keep",
+                        "vlc",
+                        "-I", "rc",
+                        # "--verbose=0",
                         stream_args["channelUri"][0]
                         ]
 
