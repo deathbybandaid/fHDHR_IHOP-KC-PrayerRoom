@@ -134,15 +134,11 @@ class WatchStream():
 
         vlc_command = [
                         "cvlc",
-                        "-I", "dummy", "-Vdummy", "-Idummy", "--no-audio",
+                        "-Vdummy", "-Idummy"
                         "-f", "--no-osd",
-                        "--no-ts-trust-pcr",
-                        "--ts-seek-percent",
                         # "--verbose=0",
                         # "--quiet",
-                        "--play-and-exit",
                         stream_args["channelUri"][0],
-                        "-L",
                         ]
 
         vlc_proc = subprocess.Popen(vlc_command, stdout=subprocess.PIPE)
