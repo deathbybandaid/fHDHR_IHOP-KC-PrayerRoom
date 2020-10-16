@@ -148,7 +148,7 @@ class Config():
                 self.dict["filedir"]["epg_cache"][epg_method]["web_cache"] = epg_web_cache_dir
                 self.dict["filedir"]["epg_cache"][epg_method]["epg_json"] = pathlib.Path(epg_cache_dir).joinpath('epg.json')
 
-        if self.dict["fhdhr"]["stream_type"] not in ["direct", "ffmpeg"]:
+        if self.dict["fhdhr"]["stream_type"] not in ["direct", "ffmpeg", "vlc"]:
             raise fHDHRerrors.ConfigurationError("Invalid stream type. Exiting...")
 
         if not self.dict["fhdhr"]["discovery_address"] and self.dict["fhdhr"]["address"] != "0.0.0.0":

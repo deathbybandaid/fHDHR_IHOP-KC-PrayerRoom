@@ -13,6 +13,40 @@ class WatchStream():
         self.tuners = tuners
         self.web = fHDHR.tools.WebReq()
 
+    def get_stream(self, stream_args):
+
+        try:
+            tunernum = self.tuners.tuner_grab(stream_args)
+        except TunerError as e:
+            print("A " + stream_args["method"] + " stream request for channel " +
+                  str(stream_args["channel"]) + " was rejected do to " + str(e))
+            return
+
+        print("Attempting a " + stream_args["method"] + " stream request for channel " + str(stream_args["channel"]))
+
+        if stream_args["method"] == "ffmpeg":
+            return self.ffmpeg_stream(stream_args, tunernum)
+        elif stream_args["method"] == "vlc":
+            return self.vlc_stream(stream_args, tunernum)
+        elif stream_args["method"] == "direct":
+            return self.direct_stream(stream_args, tunernum)
+
+    def get_stream_info(self, stream_args):
+
+        stream_args["channelUri"] = self.origserv.get_channel_stream(str(stream_args["channel"]))
+        if not stream_args["channelUri"]:
+            print("Could not Obtain Channel Stream.")
+            stream_args["content_type"] = "video/mpeg"
+            return stream_args
+
+        if isinstance(stream_args["channelUri"], str):
+            stream_args["channelUri"] = [stream_args["channelUri"]]
+
+        channelUri_headers = self.web.session.head(stream_args["channelUri"][0]).headers
+        stream_args["content_type"] = channelUri_headers['Content-Type']
+
+        return stream_args
+
     def direct_stream(self, stream_args, tunernum):
 
         chunksize = int(self.tuners.config.dict["direct_stream"]['chunksize'])
@@ -54,8 +88,8 @@ class WatchStream():
         ffmpeg_command.extend([
                                 "-c", "copy",
                                 "-f", "mpegts",
-                                # "-nostats", "-hide_banner",
-                                # "-loglevel", "fatal",
+                                "-nostats", "-hide_banner",
+                                "-loglevel", "fatal",
                                 "pipe:stdout"
                                 ])
 
@@ -94,34 +128,46 @@ class WatchStream():
 
         return generate()
 
-    def get_stream(self, stream_args):
+    def vlc_stream(self, stream_args, tunernum):
 
-        try:
-            tunernum = self.tuners.tuner_grab(stream_args)
-        except TunerError as e:
-            print("A " + stream_args["method"] + " stream request for channel " +
-                  str(stream_args["channel"]) + " was rejected do to " + str(e))
-            return
+        bytes_per_read = int(self.config.dict["ffmpeg"]["bytes_per_read"])
 
-        print("Attempting a " + stream_args["method"] + " stream request for channel " + str(stream_args["channel"]))
+        vlc_command = [
+                        "cvlc",
+                        "-vvv",
+                        stream_args["channelUri"][0],
+                        "--live-caching", "2000",
+                        "--sout"
+                        ]
 
-        if stream_args["method"] == "ffmpeg":
-            return self.ffmpeg_stream(stream_args, tunernum)
-        elif stream_args["method"] == "direct":
-            return self.direct_stream(stream_args, tunernum)
+        vlc_proc = subprocess.Popen(vlc_command, stdout=subprocess.PIPE)
 
-    def get_stream_info(self, stream_args):
+        def generate():
+            try:
+                while True:
 
-        stream_args["channelUri"] = self.origserv.get_channel_stream(str(stream_args["channel"]))
-        if not stream_args["channelUri"]:
-            print("Could not Obtain Channel Stream.")
-            stream_args["content_type"] = "video/mpeg"
-            return stream_args
+                    if not stream_args["duration"] == 0 and not time.time() < stream_args["duration"]:
+                        vlc_proc.terminate()
+                        vlc_proc.communicate()
+                        print("Requested Duration Expired.")
+                        break
 
-        if isinstance(stream_args["channelUri"], str):
-            stream_args["channelUri"] = [stream_args["channelUri"]]
+                    videoData = vlc_proc.stdout.read(bytes_per_read)
+                    if not videoData:
+                        break
 
-        channelUri_headers = self.web.session.head(stream_args["channelUri"][0]).headers
-        stream_args["content_type"] = channelUri_headers['Content-Type']
+                    try:
+                        yield videoData
 
-        return stream_args
+                    except Exception as e:
+                        vlc_proc.terminate()
+                        vlc_proc.communicate()
+                        print("Connection Closed: " + str(e))
+
+            except GeneratorExit:
+                vlc_proc.terminate()
+                vlc_proc.communicate()
+                print("Connection Closed.")
+                self.tuners.tuner_close(tunernum)
+
+        return generate()
