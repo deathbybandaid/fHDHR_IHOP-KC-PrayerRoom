@@ -115,7 +115,9 @@ class fHDHRservice():
                 else:
                     time_end = xdate.replace(hour=event["end_hour"])
                 duration_minutes = (time_end - time_start).total_seconds() / 60
+                print(time_start)
                 time_start = time_start.astimezone(pytz.utc)
+                print(time_start)
                 time_end = time_end.astimezone(pytz.utc)
                 curreventdict = {
                                 "time_start": str(time_start.strftime('%Y%m%d%H%M%S')) + " +0000",
@@ -169,7 +171,6 @@ class fHDHRservice():
                                     "isnew": False,
                                     "id": str(event['time_start']),
                                     }
-                print(clean_prog_dict["time_start"])
 
                 programguide[str(c["number"])]["listing"].append(clean_prog_dict)
 
