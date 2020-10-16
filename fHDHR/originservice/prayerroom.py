@@ -153,7 +153,7 @@ class fHDHRservice():
                     assignment_person = event['assignments'][assignment]
                     description += str(", " + assignment_title + ": " + assignment_person)
 
-                progid = event["time_start_dt"].total_seconds()
+                progid = event["time_start_dt"].timestamp()
                 print(progid)
 
                 clean_prog_dict = {
