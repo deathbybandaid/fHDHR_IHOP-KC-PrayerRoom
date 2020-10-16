@@ -43,12 +43,12 @@ class WatchStream():
     def ffmpeg_stream(self, stream_args, tunernum):
 
         bytes_per_read = int(self.config.dict["ffmpeg"]["bytes_per_read"])
-        print(stream_args["channelUri"])
 
         ffmpeg_command = [self.config.dict["ffmpeg"]["ffmpeg_path"]]
 
         for chanurl in stream_args["channelUri"]:
             ffmpeg_command.extend(["-i", chanurl])
+        print(len(stream_args["channelUri"]))
 
         ffmpeg_command.extend([
                                 "-c", "copy",
@@ -60,8 +60,6 @@ class WatchStream():
 
         if not stream_args["duration"] == 0:
             stream_args["duration"] += time.time()
-
-        print(ffmpeg_command)
 
         ffmpeg_proc = subprocess.Popen(ffmpeg_command, stdout=subprocess.PIPE)
 
