@@ -103,9 +103,6 @@ class fHDHRservice():
         kctime = pytz.timezone("America/Chicago")
         today_naive = datetime.datetime.strptime(str(datetime.date.today()) + " 00:00:00", "%Y-%m-%d %H:%M:%S")
         kc_dt = kctime.localize(today_naive)
-        print(kc_dt)
-        kc_dt = kc_dt.replace(hour=0)
-        print(kc_dt)
         for x in range(0, 6):
             xdate = kc_dt + datetime.timedelta(days=x)
             dayofweek = calendar.day_name[xdate.weekday()]
@@ -127,6 +124,7 @@ class fHDHRservice():
                                 "title": event["title"],
                                 "assignments": event["assignments"],
                                 "start_kc_time": event["start_kc_time"],
+                                "time_start_dt": time_start,
                                 }
                 events_list.append(curreventdict)
 
@@ -154,6 +152,9 @@ class fHDHRservice():
                     assignment_title = assignment_reference[assignment]
                     assignment_person = event['assignments'][assignment]
                     description += str(", " + assignment_title + ": " + assignment_person)
+
+                progid = event["time_start_dt"].total_seconds()
+                print(progid)
 
                 clean_prog_dict = {
                                     "time_start": event['time_start'],
