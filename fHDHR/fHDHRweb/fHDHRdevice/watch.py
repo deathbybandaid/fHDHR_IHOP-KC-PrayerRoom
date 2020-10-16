@@ -1,5 +1,6 @@
 import subprocess
 import time
+import ffmpeg
 
 from fHDHR.fHDHRerrors import TunerError
 import fHDHR.tools
@@ -139,7 +140,7 @@ class WatchStream():
                         break
 
                     try:
-                        yield videoData, audioData
+                        yield ffmpeg.merge_outputs(videoData, audioData).run()
 
                     except Exception as e:
                         ffmpeg_proc_video.terminate()
