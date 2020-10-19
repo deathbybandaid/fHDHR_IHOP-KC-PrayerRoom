@@ -26,8 +26,6 @@ class WatchStream():
 
         if stream_args["method"] == "ffmpeg":
             return self.ffmpeg_stream(stream_args, tunernum)
-        elif stream_args["method"] == "vlc":
-            return self.vlc_stream(stream_args, tunernum)
         elif stream_args["method"] == "direct":
             return self.direct_stream(stream_args, tunernum)
 
@@ -123,57 +121,6 @@ class WatchStream():
             except GeneratorExit:
                 ffmpeg_proc.terminate()
                 ffmpeg_proc.communicate()
-                print("Connection Closed.")
-                self.tuners.tuner_close(tunernum)
-
-        return generate()
-
-    def vlc_stream(self, stream_args, tunernum):
-
-        bytes_per_read = int(self.config.dict["ffmpeg"]["bytes_per_read"])
-
-        vlc_command = [
-                        "cvlc",
-                        "-vvv",
-                        stream_args["channelUri"][0],
-                        # "--sout",
-                        "-I", "rc",
-                        "-V", "dummy",
-                        # "-f", "--no-osd",
-                        # "--no-ts-trust-pcr",
-                        # "--ts-seek-percent",
-                        # "--verbose=0",
-                        # "--quiet",
-                        "vlc://quit"
-                        ]
-
-        vlc_proc = subprocess.Popen(vlc_command, stdout=subprocess.PIPE)
-
-        def generate():
-            try:
-                while True:
-
-                    if not stream_args["duration"] == 0 and not time.time() < stream_args["duration"]:
-                        vlc_proc.terminate()
-                        vlc_proc.communicate()
-                        print("Requested Duration Expired.")
-                        break
-
-                    videoData = vlc_proc.stdout.read(bytes_per_read)
-                    if not videoData:
-                        break
-
-                    try:
-                        yield videoData
-
-                    except Exception as e:
-                        vlc_proc.terminate()
-                        vlc_proc.communicate()
-                        print("Connection Closed: " + str(e))
-
-            except GeneratorExit:
-                vlc_proc.terminate()
-                vlc_proc.communicate()
                 print("Connection Closed.")
                 self.tuners.tuner_close(tunernum)
 

@@ -190,7 +190,7 @@ class HDHR_HTTP_Server():
         if stream_args["channelUri"]:
             if stream_args["method"] == "direct":
                 return Response(hdhr.get_stream(stream_args), content_type=stream_args["content_type"], direct_passthrough=True)
-            elif stream_args["method"] in ["ffmpeg", "vlc"]:
+            elif stream_args["method"] == "ffmpeg":
                 return Response(stream_with_context(hdhr.get_stream(stream_args)), mimetype="video/mpeg")
         abort(503)
 
